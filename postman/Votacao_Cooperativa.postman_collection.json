@@ -1,0 +1,541 @@
+{
+	"info": {
+		"_postman_id": "1234567-89ab-cdef-0123-456789abcdef",
+		"name": "Votação Cooperativa",
+		"description": "API para gerenciamento de votações em cooperativas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Associados",
+			"item": [
+				{
+					"name": "Cadastrar Associado",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Associado cadastrado com sucesso\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.exist;",
+									"    pm.expect(jsonData.nome).to.eql(pm.variables.get(\"nome\"));",
+									"    pm.expect(jsonData.cpf).to.eql(pm.variables.get(\"cpf\"));",
+									"    ",
+									"    pm.environment.set(\"associadoId\", jsonData.id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"{{nome}}\",\n    \"cpf\": \"{{cpf}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/associados",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "associados"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Pautas",
+			"item": [
+				{
+					"name": "Criar Pauta",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Pauta criada com sucesso\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.exist;",
+									"    pm.expect(jsonData.titulo).to.eql(pm.variables.get(\"titulo\"));",
+									"    pm.expect(jsonData.descricao).to.eql(pm.variables.get(\"descricao\"));",
+									"    pm.expect(jsonData.sessaoAberta).to.be.false;",
+									"    pm.expect(jsonData.dataCriacao).to.exist;",
+									"    ",
+									"    pm.environment.set(\"pautaId\", jsonData.id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"titulo\": \"{{titulo}}\",\n    \"descricao\": \"{{descricao}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/pautas",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "pautas"]
+						}
+					}
+				},
+				{
+					"name": "Listar Pautas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Lista de pautas retornada com sucesso\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"    if (jsonData.length > 0) {",
+									"        pm.expect(jsonData[0].id).to.exist;",
+									"        pm.expect(jsonData[0].titulo).to.exist;",
+									"        pm.expect(jsonData[0].descricao).to.exist;",
+									"        pm.expect(jsonData[0].dataCriacao).to.exist;",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/pautas",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "pautas"]
+						}
+					}
+				},
+				{
+					"name": "Abrir Sessão",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Sessão aberta com sucesso\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(parseInt(pm.variables.get(\"pautaId\")));",
+									"    pm.expect(jsonData.sessaoAberta).to.be.true;",
+									"    pm.expect(jsonData.inicioSessao).to.exist;",
+									"    pm.expect(jsonData.fimSessao).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duracaoMinutos\": {{duracaoMinutos}}\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/pautas/{{pautaId}}/sessao",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "pautas", "{{pautaId}}", "sessao"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Votos",
+			"item": [
+				{
+					"name": "Registrar Voto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Voto registrado com sucesso\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.exist;",
+									"    pm.expect(jsonData.pauta.id).to.eql(parseInt(pm.variables.get(\"pautaId\")));",
+									"    pm.expect(jsonData.associado.id).to.eql(parseInt(pm.variables.get(\"associadoId\")));",
+									"    pm.expect(jsonData.votoFavoravel).to.eql(pm.variables.get(\"votoFavoravel\"));",
+									"    pm.expect(jsonData.dataVoto).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"pautaId\": {{pautaId}},\n    \"associadoId\": {{associadoId}},\n    \"votoFavoravel\": {{votoFavoravel}}\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/votos",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "votos"]
+						}
+					}
+				},
+				{
+					"name": "Registrar Voto (Associado Inválido)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Erro de associado inválido retornado\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Associado não encontrado\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"pautaId\": {{pautaId}},\n    \"associadoId\": 999999,\n    \"votoFavoravel\": {{votoFavoravel}}\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/votos",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "votos"]
+						}
+					}
+				},
+				{
+					"name": "Obter Resultado",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Resultado obtido com sucesso\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.pautaId).to.eql(parseInt(pm.variables.get(\"pautaId\")));",
+									"    pm.expect(jsonData.votosSim).to.be.a('number');",
+									"    pm.expect(jsonData.votosNao).to.be.a('number');",
+									"    pm.expect(jsonData.totalVotos).to.eql(jsonData.votosSim + jsonData.votosNao);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/api/votos/resultado/{{pautaId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "votos", "resultado", "{{pautaId}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Linguagens",
+			"item": [
+				{
+					"name": "Votar em Linguagem",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"language\": \"{{language}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/votes",
+							"host": ["{{baseUrl}}"],
+							"path": ["votes"]
+						},
+						"description": "Registra um voto para uma linguagem de programação"
+					}
+				},
+				{
+					"name": "Obter Ranking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Ranking retornado com sucesso\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"    if (jsonData.length > 0) {",
+									"        pm.expect(jsonData[0].language).to.exist;",
+									"        pm.expect(jsonData[0].votes).to.exist;",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/ranking",
+							"host": ["{{baseUrl}}"],
+							"path": ["ranking"]
+						},
+						"description": "Retorna o ranking atual das linguagens mais votadas"
+					}
+				}
+			],
+			"description": "Endpoints relacionados à votação de linguagens de programação"
+		},
+		{
+			"name": "Testes de Performance",
+			"item": [
+				{
+					"name": "Smoke Test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Tempo de resposta é menor que 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"language\": \"Java\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/votes",
+							"host": ["{{baseUrl}}"],
+							"path": ["votes"]
+						},
+						"description": "Teste básico de performance para validar o endpoint de votação"
+					}
+				},
+				{
+					"name": "Load Test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Tempo de resposta é menor que 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"language\": \"Python\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/votes",
+							"host": ["{{baseUrl}}"],
+							"path": ["votes"]
+						},
+						"description": "Teste de carga para simular uso normal da aplicação"
+					}
+				},
+				{
+					"name": "Stress Test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 201 ou 429\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 429]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"language\": \"JavaScript\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/votes",
+							"host": ["{{baseUrl}}"],
+							"path": ["votes"]
+						},
+						"description": "Teste de stress para avaliar os limites da aplicação"
+					}
+				}
+			],
+			"description": "Endpoints configurados para testes de performance"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"if (!pm.variables.get(\"nome\")) {",
+					"    pm.variables.set(\"nome\", \"Associado de Teste\");",
+					"}",
+					"if (!pm.variables.get(\"cpf\")) {",
+					"    pm.variables.set(\"cpf\", \"12345678909\");",
+					"}",
+					"if (!pm.variables.get(\"titulo\")) {",
+					"    pm.variables.set(\"titulo\", \"Pauta de Teste\");",
+					"}",
+					"if (!pm.variables.get(\"descricao\")) {",
+					"    pm.variables.set(\"descricao\", \"Descrição da pauta de teste\");",
+					"}",
+					"if (!pm.variables.get(\"duracaoMinutos\")) {",
+					"    pm.variables.set(\"duracaoMinutos\", 5);",
+					"}",
+					"if (!pm.variables.get(\"votoFavoravel\")) {",
+					"    pm.variables.set(\"votoFavoravel\", true);",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+} 

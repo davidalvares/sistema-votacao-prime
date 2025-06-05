@@ -1,0 +1,27 @@
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: votacao_db
+      username: votacao_user
+      password: votacao_password
+      authentication-database: admin
+      uri: mongodb://localhost:27017/votacao_db
+
+server:
+  port: 8080
+
+app:
+  user-info:
+    url: http://localhost:8089
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+
+user:
+  info:
+    base-url: https://user-info.herokuapp.com 
