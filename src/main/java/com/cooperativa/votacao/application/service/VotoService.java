@@ -5,6 +5,8 @@ import com.cooperativa.votacao.domain.model.Associado;
 import com.cooperativa.votacao.domain.model.Pauta;
 import com.cooperativa.votacao.domain.model.Voto;
 import com.cooperativa.votacao.domain.ports.VotoRepository;
+import com.cooperativa.votacao.infrastructure.exception.SessaoNaoAbertaException;
+import com.cooperativa.votacao.infrastructure.exception.VotoJaRegistradoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,13 +24,13 @@ public class VotoService {
         Pauta pauta = pautaService.buscarPorId(request.pautaId());
         
         if (!pauta.isSessaoAberta()) {
-            throw new IllegalStateException("Sessão de votação não está aberta");
+            throw new SessaoNaoAbertaException("Sessão de votação não está aberta");
         }
         
         Associado associado = associadoService.buscarPorId(request.associadoId());
         
         if (votoRepository.existsByPautaIdAndAssociadoId(request.pautaId(), request.associadoId())) {
-            throw new IllegalStateException("Associado já votou nesta pauta");
+            throw new VotoJaRegistradoException("Associado já votou nesta pauta");
         }
         
         Voto voto = new Voto();

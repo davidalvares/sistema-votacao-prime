@@ -7,6 +7,7 @@ import com.cooperativa.votacao.domain.model.Voto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +19,7 @@ public class VotoController {
     
     @PostMapping
     public ResponseEntity<Voto> registrarVoto(@Valid @RequestBody RegistrarVotoRequest request) {
-        return ResponseEntity.ok(votoService.registrarVoto(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(votoService.registrarVoto(request));
     }
     
     @GetMapping("/resultado/{pautaId}")

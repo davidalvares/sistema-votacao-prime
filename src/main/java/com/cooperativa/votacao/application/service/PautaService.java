@@ -2,6 +2,8 @@ package com.cooperativa.votacao.application.service;
 
 import com.cooperativa.votacao.domain.model.Pauta;
 import com.cooperativa.votacao.domain.ports.PautaRepository;
+import com.cooperativa.votacao.infrastructure.exception.PautaNaoEncontradaException;
+import com.cooperativa.votacao.infrastructure.exception.SessaoJaAbertaException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +31,7 @@ public class PautaService {
         Pauta pauta = buscarPorId(pautaId);
         
         if (pauta.isSessaoAberta()) {
-            throw new IllegalStateException("Sessão já está aberta");
+            throw new SessaoJaAbertaException("Sessão já está aberta");
         }
         
         LocalDateTime agora = LocalDateTime.now();
@@ -42,6 +44,6 @@ public class PautaService {
     
     public Pauta buscarPorId(String id) {
         return pautaRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Pauta não encontrada"));
+            .orElseThrow(() -> new PautaNaoEncontradaException("Pauta não encontrada"));
     }
 } 

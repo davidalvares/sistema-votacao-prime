@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class PautaController {
     
     @PostMapping
     public ResponseEntity<Pauta> criarPauta(@Valid @RequestBody CriarPautaRequest request) {
-        return ResponseEntity.ok(pautaService.criar(request.titulo(), request.descricao()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(pautaService.criar(request.titulo(), request.descricao()));
     }
     
     @PostMapping("/{id}/sessao")

@@ -5,6 +5,7 @@
 //import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 //import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 //import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 //
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +36,15 @@
 //    void deveCadastrarAssociadoComSucesso() throws Exception {
 //
 //        AssociadoRequest request = new AssociadoRequest("João da Silva", "12345678900");
-//        Associado associado = new Associado(1L, "João da Silva", "12345678900");
+//        Associado associado = new Associado("1", "João da Silva", "12345678900");
 //        when(associadoService.cadastrarAssociado(any(AssociadoRequest.class))).thenReturn(associado);
 //
 //
 //        mockMvc.perform(post("/api/associados")
 //                .contentType(MediaType.APPLICATION_JSON)
 //                .content(objectMapper.writeValueAsString(request)))
-//            .andExpect(status().isOk())
+//            .andExpect(status().isCreated())
+//            .andExpect(header().string("Location", "/api/associados/1"))
 //            .andExpect(jsonPath("$.id").value(associado.getId()))
 //            .andExpect(jsonPath("$.nome").value(associado.getNome()))
 //            .andExpect(jsonPath("$.cpf").value(associado.getCpf()));

@@ -5,6 +5,8 @@ import com.cooperativa.votacao.domain.model.Associado;
 import com.cooperativa.votacao.domain.model.StatusUsuario;
 import com.cooperativa.votacao.domain.repository.AssociadoRepository;
 import com.cooperativa.votacao.infrastructure.client.UsuarioInfoClient;
+import com.cooperativa.votacao.infrastructure.exception.AssociadoJaExisteException;
+import com.cooperativa.votacao.infrastructure.exception.AssociadoNaoEncontradoException;
 import com.cooperativa.votacao.infrastructure.exception.CpfInvalidoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ public class AssociadoService {
     @Transactional
     public Associado cadastrarAssociado(AssociadoRequest request) {
         if (associadoRepository.existsByCpf(request.cpf())) {
-            throw new IllegalArgumentException("CPF já cadastrado");
+            throw new AssociadoJaExisteException("CPF já cadastrado");
         }
         
         StatusUsuario status = usuarioInfoClient.verificarCPF(request.cpf());
@@ -37,6 +39,6 @@ public class AssociadoService {
     
     public Associado buscarPorId(String id) {
         return associadoRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Associado não encontrado"));
+            .orElseThrow(() -> new AssociadoNaoEncontradoException("Associado não encontrado"));
     }
 } 
