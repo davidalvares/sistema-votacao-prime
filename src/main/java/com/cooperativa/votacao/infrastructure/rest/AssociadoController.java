@@ -5,14 +5,11 @@ import com.cooperativa.votacao.application.service.AssociadoService;
 import com.cooperativa.votacao.domain.model.Associado;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/associados")
@@ -23,12 +20,17 @@ public class AssociadoController {
     
     @PostMapping
     public ResponseEntity<Associado> cadastrarAssociado(@Valid @RequestBody AssociadoRequest request) {
-        Associado associado = associadoService.cadastrarAssociado(request);
-        URI location = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(associado.getId())
-            .toUri();
-        return ResponseEntity.created(location).body(associado);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(associadoService.cadastrarAssociado(request));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Associado> buscarPorId(@PathVariable String id) {
+        return ResponseEntity.ok(associadoService.buscarPorId(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Associado>> listarTodos() {
+        return ResponseEntity.ok(associadoService.findAll());
     }
 } 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,5 +46,9 @@ public class PautaService {
     public Pauta buscarPorId(String id) {
         return pautaRepository.findById(id)
             .orElseThrow(() -> new PautaNaoEncontradaException("Pauta não encontrada"));
+    }
+
+    public List<Pauta> findAll() {
+        return pautaRepository.findAll();
     }
 } 

@@ -75,9 +75,5 @@ public class VotoService {
         votoRepository.save(voto);
     }
 
-    public record ResultadoVotacao(String pautaId, Long votosSim, Long votosNao) {
-        public Long getTotalVotos() {
-            return votosSim + votosNao;
-        }
-    }
+    public record ResultadoVotacao(String pautaId, Long votosSim, Long votosNao) {}
 } 

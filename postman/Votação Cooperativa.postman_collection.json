@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "1234567-89ab-cdef-0123-456789abcdef",
+		"_postman_id": "407323ef-3ad9-4e5c-b09a-6628cfa771c0",
 		"name": "Votação Cooperativa",
 		"description": "API para gerenciamento de votações em cooperativas",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8824398"
 	},
 	"item": [
 		{
@@ -16,12 +17,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code é 201\", function () {",
-									"    pm.response.to.have.status(201);",
-									"});",
-									"",
-									"pm.test(\"Header Location está presente\", function () {",
-									"    pm.response.to.have.header(\"Location\");",
+									"pm.test(\"Status code é 200\", function () {",
+									"    pm.response.to.have.status(200);",
 									"});",
 									"",
 									"pm.test(\"Associado cadastrado com sucesso\", function () {",
@@ -33,7 +30,8 @@
 									"    pm.environment.set(\"associadoId\", jsonData.id);",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -47,14 +45,20 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nome\": \"{{nome}}\",\n    \"cpf\": \"{{cpf}}\"\n}"
+							"raw": "{\n    \"nome\": \"Elianha Alvares\",\n    \"cpf\": \"46978198021\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/associados",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "associados"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"associados"
+							]
 						}
-					}
+					},
+					"response": []
 				}
 			]
 		},
@@ -101,10 +105,16 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/pautas",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "pautas"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"pautas"
+							]
 						}
-					}
+					},
+					"response": []
 				},
 				{
 					"name": "Listar Pautas",
@@ -134,12 +144,19 @@
 					],
 					"request": {
 						"method": "GET",
+						"header": [],
 						"url": {
 							"raw": "{{baseUrl}}/api/pautas",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "pautas"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"pautas"
+							]
 						}
-					}
+					},
+					"response": []
 				},
 				{
 					"name": "Abrir Sessão",
@@ -178,10 +195,18 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/pautas/{{pautaId}}/sessao",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "pautas", "{{pautaId}}", "sessao"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"pautas",
+								"{{pautaId}}",
+								"sessao"
+							]
 						}
-					}
+					},
+					"response": []
 				}
 			]
 		},
@@ -208,7 +233,8 @@
 									"    pm.expect(jsonData.dataVoto).to.exist;",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -222,52 +248,25 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"pautaId\": {{pautaId}},\n    \"associadoId\": {{associadoId}},\n    \"votoFavoravel\": {{votoFavoravel}}\n}"
+							"raw": "{\n    \"pautaId\": \"6844f0f87168566c98d9ba7d\",\n    \"associadoId\": \"6844e647ca08f66ec76ef639\",\n    \"votoFavoravel\": false\n}",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/votos",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "votos"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"votos"
+							]
 						}
-					}
-				},
-				{
-					"name": "Registrar Voto (Associado Inválido)",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code é 400\", function () {",
-									"    pm.response.to.have.status(400);",
-									"});",
-									"",
-									"pm.test(\"Erro de associado inválido retornado\", function () {",
-									"    pm.expect(pm.response.text()).to.include(\"Associado não encontrado\");",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"pautaId\": {{pautaId}},\n    \"associadoId\": 999999,\n    \"votoFavoravel\": {{votoFavoravel}}\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/api/votos",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "votos"]
-						}
-					}
+					},
+					"response": []
 				},
 				{
 					"name": "Obter Resultado",
@@ -288,95 +287,30 @@
 									"    pm.expect(jsonData.totalVotos).to.eql(jsonData.votosSim + jsonData.votosNao);",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
 					"request": {
 						"method": "GET",
+						"header": [],
 						"url": {
 							"raw": "{{baseUrl}}/api/votos/resultado/{{pautaId}}",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "votos", "resultado", "{{pautaId}}"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"votos",
+								"resultado",
+								"{{pautaId}}"
+							]
 						}
-					}
+					},
+					"response": []
 				}
 			]
-		},
-		{
-			"name": "Linguagens",
-			"item": [
-				{
-					"name": "Votar em Linguagem",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code é 201\", function () {",
-									"    pm.response.to.have.status(201);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"language\": \"{{language}}\"\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/votes",
-							"host": ["{{baseUrl}}"],
-							"path": ["votes"]
-						},
-						"description": "Registra um voto para uma linguagem de programação"
-					}
-				},
-				{
-					"name": "Obter Ranking",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code é 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Ranking retornado com sucesso\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.be.an('array');",
-									"    if (jsonData.length > 0) {",
-									"        pm.expect(jsonData[0].language).to.exist;",
-									"        pm.expect(jsonData[0].votes).to.exist;",
-									"    }",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"url": {
-							"raw": "{{baseUrl}}/ranking",
-							"host": ["{{baseUrl}}"],
-							"path": ["ranking"]
-						},
-						"description": "Retorna o ranking atual das linguagens mais votadas"
-					}
-				}
-			],
-			"description": "Endpoints relacionados à votação de linguagens de programação"
 		},
 		{
 			"name": "Testes de Performance",
@@ -414,11 +348,16 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/votes",
-							"host": ["{{baseUrl}}"],
-							"path": ["votes"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"votes"
+							]
 						},
 						"description": "Teste básico de performance para validar o endpoint de votação"
-					}
+					},
+					"response": []
 				},
 				{
 					"name": "Load Test",
@@ -453,11 +392,16 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/votes",
-							"host": ["{{baseUrl}}"],
-							"path": ["votes"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"votes"
+							]
 						},
 						"description": "Teste de carga para simular uso normal da aplicação"
-					}
+					},
+					"response": []
 				},
 				{
 					"name": "Stress Test",
@@ -488,11 +432,16 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/votes",
-							"host": ["{{baseUrl}}"],
-							"path": ["votes"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"votes"
+							]
 						},
 						"description": "Teste de stress para avaliar os limites da aplicação"
-					}
+					},
+					"response": []
 				}
 			],
 			"description": "Endpoints configurados para testes de performance"
@@ -542,4 +491,4 @@
 			"type": "string"
 		}
 	]
-} 
+}

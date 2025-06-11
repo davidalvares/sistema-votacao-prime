@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AssociadoService {
@@ -38,7 +40,14 @@ public class AssociadoService {
     }
     
     public Associado buscarPorId(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID do associado não pode ser nulo");
+        }
         return associadoRepository.findById(id)
             .orElseThrow(() -> new AssociadoNaoEncontradoException("Associado não encontrado"));
+    }
+
+    public List<Associado> findAll() {
+        return associadoRepository.findAll();
     }
 } 

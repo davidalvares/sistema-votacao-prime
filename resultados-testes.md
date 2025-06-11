@@ -1,14 +1,13 @@
 # Relatório de Testes - Sistema de Votação
 
 ## Informações do Ambiente
-- **Data dos Testes**: 03/06/2025
+- **Data dos Testes**: 11/06/2025
 - **Ambiente**: Local (Docker)
 - **URL Base**: http://localhost:8080
 - **Versão da Aplicação**: 1.0.0
 
 ## Configuração do Ambiente
 O ambiente foi configurado usando Docker Compose com os seguintes serviços:
-- PostgreSQL (porta 5433)
 - Aplicação Spring Boot (porta 8080)
 
 ## Testes Realizados

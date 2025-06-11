@@ -1,5 +1,6 @@
 package com.cooperativa.votacao.infrastructure.client;
 
+
 import com.cooperativa.votacao.domain.exception.CpfInvalidoException;
 import com.cooperativa.votacao.domain.model.StatusUsuario;
 import com.github.tomakehurst.wiremock.WireMockServer;

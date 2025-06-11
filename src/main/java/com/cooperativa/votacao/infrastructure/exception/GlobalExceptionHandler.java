@@ -71,5 +71,5 @@ public class GlobalExceptionHandler {
             .body(new ErrorResponse(e.getMessage()));
     }
 
-    record ErrorResponse(String message) {}
+    public record ErrorResponse(String message) {}
 } 

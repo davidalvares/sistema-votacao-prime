@@ -19,13 +19,13 @@ public class KafkaVoteMessagingAdapter implements VoteMessagingPort {
 
     @Override
     public void sendVote(VoteMessage vote) {
-        log.info("Sending vote message: {}", vote);
+        log.info("Enviando mensagem de voto: {}", vote);
         kafkaTemplate.send(TOPIC, vote)
                 .whenComplete((result, ex) -> {
                     if (ex == null) {
-                        log.info("Vote message sent successfully: {}", result.getRecordMetadata());
+                        log.info("Mensagem de voto enviada com sucesso: {}", result.getRecordMetadata());
                     } else {
-                        log.error("Unable to send vote message: {}", ex.getMessage());
+                        log.error("Não foi possível enviar a mensagem de voto: {}", ex.getMessage());
                     }
                 });
     }
