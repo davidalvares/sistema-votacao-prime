@@ -62,15 +62,15 @@ class AssociadoServiceTest {
         @Test
         @DisplayName("Deve cadastrar associado com sucesso quando dados são válidos")
         void deveCadastrarAssociadoComSucesso() {
-            // Arrange
+
             when(associadoRepository.existsByCpf(validRequest.cpf())).thenReturn(false);
             when(usuarioInfoClient.verificarCPF(validRequest.cpf())).thenReturn(StatusUsuario.ABLE_TO_VOTE);
             when(associadoRepository.save(any(Associado.class))).thenReturn(validAssociado);
 
-            // Act
+
             Associado resultado = associadoService.cadastrarAssociado(validRequest);
 
-            // Assert
+
             assertNotNull(resultado);
             assertEquals(validAssociado.getId(), resultado.getId());
             assertEquals(validAssociado.getNome(), resultado.getNome());
@@ -90,10 +90,10 @@ class AssociadoServiceTest {
         @Test
         @DisplayName("Deve lançar exceção quando CPF já existe")
         void deveLancarExcecaoQuandoCpfJaExiste() {
-            // Arrange
+
             when(associadoRepository.existsByCpf(validRequest.cpf())).thenReturn(true);
 
-            // Act & Assert
+
             AssociadoJaExisteException exception = assertThrows(AssociadoJaExisteException.class, () -> 
                 associadoService.cadastrarAssociado(validRequest)
             );
@@ -107,11 +107,11 @@ class AssociadoServiceTest {
         @Test
         @DisplayName("Deve lançar exceção quando CPF é inválido")
         void deveLancarExcecaoQuandoCpfInvalido() {
-            // Arrange
+
             when(associadoRepository.existsByCpf(validRequest.cpf())).thenReturn(false);
             when(usuarioInfoClient.verificarCPF(validRequest.cpf())).thenThrow(new CpfInvalidoException("CPF inválido"));
 
-            // Act & Assert
+
             CpfInvalidoException exception = assertThrows(CpfInvalidoException.class, () -> 
                 associadoService.cadastrarAssociado(validRequest)
             );
@@ -125,11 +125,11 @@ class AssociadoServiceTest {
         @Test
         @DisplayName("Deve lançar exceção quando associado não está habilitado para votar")
         void deveLancarExcecaoQuandoAssociadoNaoHabilitado() {
-            // Arrange
+
             when(associadoRepository.existsByCpf(validRequest.cpf())).thenReturn(false);
             when(usuarioInfoClient.verificarCPF(validRequest.cpf())).thenReturn(StatusUsuario.UNABLE_TO_VOTE);
 
-            // Act & Assert
+
             CpfInvalidoException exception = assertThrows(CpfInvalidoException.class, () -> 
                 associadoService.cadastrarAssociado(validRequest)
             );
@@ -148,13 +148,13 @@ class AssociadoServiceTest {
         @Test
         @DisplayName("Deve buscar associado por ID com sucesso")
         void deveBuscarAssociadoPorId() {
-            // Arrange
+
             when(associadoRepository.findById(VALID_ID)).thenReturn(Optional.of(validAssociado));
 
-            // Act
+
             Associado resultado = associadoService.buscarPorId(VALID_ID);
 
-            // Assert
+
             assertNotNull(resultado);
             assertEquals(VALID_ID, resultado.getId());
             assertEquals(VALID_NAME, resultado.getNome());
@@ -165,11 +165,11 @@ class AssociadoServiceTest {
         @Test
         @DisplayName("Deve lançar exceção quando associado não é encontrado")
         void deveLancarExcecaoQuandoAssociadoNaoEncontrado() {
-            // Arrange
+
             String id = "999";
             when(associadoRepository.findById(id)).thenReturn(Optional.empty());
 
-            // Act & Assert
+
             AssociadoNaoEncontradoException exception = assertThrows(AssociadoNaoEncontradoException.class, () -> 
                 associadoService.buscarPorId(id)
             );
@@ -180,7 +180,7 @@ class AssociadoServiceTest {
         @Test
         @DisplayName("Deve lançar exceção quando ID é nulo")
         void deveLancarExcecaoQuandoIdNulo() {
-            // Act & Assert
+
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> 
                 associadoService.buscarPorId(null)
             );
@@ -196,7 +196,7 @@ class AssociadoServiceTest {
         @Test
         @DisplayName("Deve listar todos os associados com sucesso")
         void deveListarTodosAssociados() {
-            // Arrange
+
             Associado associado1 = new Associado();
             associado1.setId("1");
             associado1.setNome("João");
@@ -210,10 +210,10 @@ class AssociadoServiceTest {
             List<Associado> associados = Arrays.asList(associado1, associado2);
             when(associadoRepository.findAll()).thenReturn(associados);
 
-            // Act
+
             List<Associado> resultado = associadoService.findAll();
 
-            // Assert
+
             assertNotNull(resultado);
             assertEquals(2, resultado.size());
             assertEquals("João", resultado.get(0).getNome());
@@ -224,13 +224,13 @@ class AssociadoServiceTest {
         @Test
         @DisplayName("Deve retornar lista vazia quando não há associados cadastrados")
         void deveRetornarListaVaziaQuandoNaoHaAssociados() {
-            // Arrange
+
             when(associadoRepository.findAll()).thenReturn(List.of());
 
-            // Act
+
             List<Associado> resultado = associadoService.findAll();
 
-            // Assert
+
             assertNotNull(resultado);
             assertTrue(resultado.isEmpty());
             verify(associadoRepository).findAll();

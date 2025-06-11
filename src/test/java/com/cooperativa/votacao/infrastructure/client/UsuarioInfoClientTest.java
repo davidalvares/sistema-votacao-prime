@@ -37,46 +37,46 @@ class UsuarioInfoClientTest {
 
     @Test
     void deveRetornarAbleToVoteQuandoCpfValido() {
-        // given
+
         stubFor(get(urlEqualTo("/users/" + CPF_VALIDO))
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .withBody("{\"status\": \"ABLE_TO_VOTE\"}")));
 
-        // when
+
         StatusUsuario status = userInfoClient.verificarCPF(CPF_VALIDO);
 
-        // then
+
         assertEquals(StatusUsuario.ABLE_TO_VOTE, status);
         verify(getRequestedFor(urlEqualTo("/users/" + CPF_VALIDO)));
     }
 
     @Test
     void deveRetornarUnableToVoteQuandoCpfBloqueado() {
-        // given
+
         stubFor(get(urlEqualTo("/users/" + CPF_VALIDO))
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .withBody("{\"status\": \"UNABLE_TO_VOTE\"}")));
 
-        // when
+
         StatusUsuario status = userInfoClient.verificarCPF(CPF_VALIDO);
 
-        // then
+
         assertEquals(StatusUsuario.UNABLE_TO_VOTE, status);
         verify(getRequestedFor(urlEqualTo("/users/" + CPF_VALIDO)));
     }
 
     @Test
     void deveLancarExcecaoQuandoCpfInvalido() {
-        // given
+
         stubFor(get(urlEqualTo("/users/" + CPF_INVALIDO))
             .willReturn(aResponse()
                 .withStatus(404)));
 
-        // when/then
+
         assertThrows(CpfInvalidoException.class, () -> {
             userInfoClient.verificarCPF(CPF_INVALIDO);
         });
@@ -85,12 +85,12 @@ class UsuarioInfoClientTest {
 
     @Test
     void deveLancarExcecaoQuandoErroInesperado() {
-        // given
+
         stubFor(get(urlEqualTo("/users/" + CPF_VALIDO))
             .willReturn(aResponse()
                 .withStatus(500)));
 
-        // when/then
+
         assertThrows(RuntimeException.class, () -> {
             userInfoClient.verificarCPF(CPF_VALIDO);
         });
