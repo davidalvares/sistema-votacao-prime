@@ -36,7 +36,7 @@ public class KafkaConfig {
     @Bean
     public NewTopic votacaoVotesTopic() {
         return TopicBuilder.name("votacao-votes")
-                .partitions(3)  // Multiple partitions for better scalability
+                .partitions(3)
                 .replicas(1)
                 .build();
     }
